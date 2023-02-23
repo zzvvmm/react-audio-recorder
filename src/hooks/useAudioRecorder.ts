@@ -44,46 +44,50 @@ const useAudioRecorder: () => recorderControls = () => {
   /**
    * Calling this method would result in the recording to start. Sets `isRecording` to true
    */
-  const startRecording: (deviceId?: string) => void = useCallback((deviceId?: string) => {
-    if (timerInterval != null) return;
-    if (deviceId) {
-      navigator.mediaDevices
-        .getUserMedia({
-          audio: {deviceId: deviceId ? {exact: deviceId} : undefined},
-        })
-        .then((stream) => {
-          setIsRecording(true);
-          const recorder: MediaRecorder = new MediaRecorder(stream);
-          setMediaRecorder(recorder);
-          recorder.start();
-          _startTimer();
+  const startRecording: () => void = useCallback(
+    (deviceId?: string) => {
+      if (timerInterval != null) return;
+      if (deviceId) {
+        console.log(deviceId)
+        navigator.mediaDevices
+          .getUserMedia({
+            audio: { deviceId: deviceId ? { exact: deviceId } : undefined },
+          })
+          .then((stream) => {
+            setIsRecording(true);
+            const recorder: MediaRecorder = new MediaRecorder(stream);
+            setMediaRecorder(recorder);
+            recorder.start();
+            _startTimer();
 
-          recorder.addEventListener("dataavailable", (event) => {
-            setRecordingBlob(event.data);
-            recorder.stream.getTracks().forEach((t) => t.stop());
-            setMediaRecorder(null);
-          });
-        })
-        .catch((err) => console.log(err));
-    } else {
-      navigator.mediaDevices
-        .getUserMedia({ audio: true })
-        .then((stream) => {
-          setIsRecording(true);
-          const recorder: MediaRecorder = new MediaRecorder(stream);
-          setMediaRecorder(recorder);
-          recorder.start();
-          _startTimer();
+            recorder.addEventListener("dataavailable", (event) => {
+              setRecordingBlob(event.data);
+              recorder.stream.getTracks().forEach((t) => t.stop());
+              setMediaRecorder(null);
+            });
+          })
+          .catch((err) => console.log(err));
+      } else {
+        navigator.mediaDevices
+          .getUserMedia({ audio: true })
+          .then((stream) => {
+            setIsRecording(true);
+            const recorder: MediaRecorder = new MediaRecorder(stream);
+            setMediaRecorder(recorder);
+            recorder.start();
+            _startTimer();
 
-          recorder.addEventListener("dataavailable", (event) => {
-            setRecordingBlob(event.data);
-            recorder.stream.getTracks().forEach((t) => t.stop());
-            setMediaRecorder(null);
-          });
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [timerInterval]);
+            recorder.addEventListener("dataavailable", (event) => {
+              setRecordingBlob(event.data);
+              recorder.stream.getTracks().forEach((t) => t.stop());
+              setMediaRecorder(null);
+            });
+          })
+          .catch((err) => console.log(err));
+      }
+    },
+    [timerInterval]
+  );
 
   /**
    * Calling this method results in a recording in progress being stopped and the resulting audio being present in `recordingBlob`. Sets `isRecording` to false
