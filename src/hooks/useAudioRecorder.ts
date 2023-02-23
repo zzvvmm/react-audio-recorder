@@ -44,25 +44,45 @@ const useAudioRecorder: () => recorderControls = () => {
   /**
    * Calling this method would result in the recording to start. Sets `isRecording` to true
    */
-  const startRecording: () => void = useCallback(() => {
+  const startRecording: () => void = useCallback((audioDeviceId?: string) => {
     if (timerInterval != null) return;
+    if (audioDeviceId) {
+      navigator.mediaDevices
+        .getUserMedia({
+          audio: {deviceId: audioDeviceId ? {exact: audioDeviceId} : undefined},
+        })
+        .then((stream) => {
+          setIsRecording(true);
+          const recorder: MediaRecorder = new MediaRecorder(stream);
+          setMediaRecorder(recorder);
+          recorder.start();
+          _startTimer();
 
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then((stream) => {
-        setIsRecording(true);
-        const recorder: MediaRecorder = new MediaRecorder(stream);
-        setMediaRecorder(recorder);
-        recorder.start();
-        _startTimer();
+          recorder.addEventListener("dataavailable", (event) => {
+            setRecordingBlob(event.data);
+            recorder.stream.getTracks().forEach((t) => t.stop());
+            setMediaRecorder(null);
+          });
+        })
+        .catch((err) => console.log(err));
+    } else {
+      navigator.mediaDevices
+        .getUserMedia({ audio: true })
+        .then((stream) => {
+          setIsRecording(true);
+          const recorder: MediaRecorder = new MediaRecorder(stream);
+          setMediaRecorder(recorder);
+          recorder.start();
+          _startTimer();
 
-        recorder.addEventListener("dataavailable", (event) => {
-          setRecordingBlob(event.data);
-          recorder.stream.getTracks().forEach((t) => t.stop());
-          setMediaRecorder(null);
-        });
-      })
-      .catch((err) => console.log(err));
+          recorder.addEventListener("dataavailable", (event) => {
+            setRecordingBlob(event.data);
+            recorder.stream.getTracks().forEach((t) => t.stop());
+            setMediaRecorder(null);
+          });
+        })
+        .catch((err) => console.log(err));
+    }
   }, [timerInterval]);
 
   /**
