@@ -48,7 +48,7 @@ const useAudioRecorder: () => recorderControls = () => {
     (deviceId?: string) => {
       if (timerInterval != null) return;
       if (deviceId) {
-        console.log(deviceId)
+        console.log(deviceId);
         navigator.mediaDevices
           .getUserMedia({
             audio: { deviceId: deviceId ? { exact: deviceId } : undefined },
