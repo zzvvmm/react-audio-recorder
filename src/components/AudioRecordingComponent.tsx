@@ -21,6 +21,7 @@ import "../styles/audio-recorder.css";
 const AudioRecorder: (props: Props) => ReactElement = ({
   onRecordingComplete,
   recorderControls,
+  deviceId,
   classes,
 }: Props) => {
   const {
@@ -62,7 +63,7 @@ const AudioRecorder: (props: Props) => ReactElement = ({
         className={`audio-recorder-mic ${
           classes?.AudioRecorderStartSaveClass ?? ""
         }`}
-        onClick={isRecording ? () => stopAudioRecorder() : startRecording}
+        onClick={isRecording ? () => stopAudioRecorder() : startRecording(deviceId)}
         data-testid="ar_mic"
         title={isRecording ? "Save recording" : "Start recording"}
       />

@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 
 export interface recorderControls {
-  startRecording: () => void;
+  startRecording: (deviceId?: string) => void;
   stopRecording: () => void;
   togglePauseResume: () => void;
   recordingBlob?: Blob;
@@ -44,12 +44,12 @@ const useAudioRecorder: () => recorderControls = () => {
   /**
    * Calling this method would result in the recording to start. Sets `isRecording` to true
    */
-  const startRecording: () => void = useCallback((audioDeviceId?: string) => {
+  const startRecording: (deviceId?: string) => void = useCallback((deviceId?: string) => {
     if (timerInterval != null) return;
-    if (audioDeviceId) {
+    if (deviceId) {
       navigator.mediaDevices
         .getUserMedia({
-          audio: {deviceId: audioDeviceId ? {exact: audioDeviceId} : undefined},
+          audio: {deviceId: deviceId ? {exact: deviceId} : undefined},
         })
         .then((stream) => {
           setIsRecording(true);

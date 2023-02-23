@@ -39,6 +39,7 @@ export interface Props {
    * @sample_usage https://github.com/samhirtarif/react-audio-recorder#combine-the-useaudiorecorder-hook-and-the-audiorecorder-component
    **/
   recorderControls?: recorderControls;
+  deviceId?: string;
   /**
    * Custom classes to changes styles.
    **/
