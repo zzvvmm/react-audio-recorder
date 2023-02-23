@@ -65,7 +65,9 @@ const AudioRecorder: (props: Props) => ReactElement = ({
           classes?.AudioRecorderStartSaveClass ?? ""
         }`}
         onClick={
-          isRecording ? () => stopAudioRecorder() : startRecording(deviceId)
+          isRecording
+            ? () => stopAudioRecorder()
+            : () => startRecording(deviceId)
         }
         data-testid="ar_mic"
         title={isRecording ? "Save recording" : "Start recording"}

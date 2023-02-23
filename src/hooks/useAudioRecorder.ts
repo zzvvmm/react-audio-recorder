@@ -44,7 +44,7 @@ const useAudioRecorder: () => recorderControls = () => {
   /**
    * Calling this method would result in the recording to start. Sets `isRecording` to true
    */
-  const startRecording: () => void = useCallback(
+  const startRecording: (deviceId?: string) => void = useCallback(
     (deviceId?: string) => {
       if (timerInterval != null) return;
       if (deviceId) {
