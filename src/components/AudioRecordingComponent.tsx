@@ -43,6 +43,12 @@ const AudioRecorder: (props: Props) => ReactElement = ({
     stopRecording();
   };
 
+  const startAudioRecorder: (deviceId?: string) => void = (
+    deviceId?: string
+  ) => {
+    startRecording(deviceId);
+  };
+
   useEffect(() => {
     if (
       (shouldSave || recorderControls) &&
@@ -67,7 +73,7 @@ const AudioRecorder: (props: Props) => ReactElement = ({
         onClick={
           isRecording
             ? () => stopAudioRecorder()
-            : () => startRecording(deviceId)
+            : () => startAudioRecorder(deviceId)
         }
         data-testid="ar_mic"
         title={isRecording ? "Save recording" : "Start recording"}
