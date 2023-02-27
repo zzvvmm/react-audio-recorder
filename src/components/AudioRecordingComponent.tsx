@@ -46,6 +46,7 @@ const AudioRecorder: (props: Props) => ReactElement = ({
   const startAudioRecorder: (deviceId?: string) => void = (
     deviceId?: string
   ) => {
+    console.log(deviceId);
     startRecording(deviceId);
   };
 
